@@ -17,7 +17,7 @@ public class FilmQueryApp {
 	public static void main(String[] args) {
 		FilmQueryApp app = new FilmQueryApp();
 //		app.test();
-    app.launch();
+		app.launch();
 	}
 
 	private void test() throws SQLException {
@@ -29,7 +29,7 @@ public class FilmQueryApp {
 //
 //		Actor actor = db.findActorById(1);
 //		System.out.println(actor);
-		
+
 //		List<Actor> cast = db.findActorsByFilmId(1);
 //		for (Actor member : cast) {
 //			System.out.println(member);
@@ -45,8 +45,8 @@ public class FilmQueryApp {
 	}
 
 	private void startUserInterface(Scanner input) {
-		
-		while(true) {
+
+		while (true) {
 			printMainMenu();
 			System.out.println("How would you like to search?: ");
 			int option = input.nextInt();
@@ -68,23 +68,28 @@ public class FilmQueryApp {
 				System.out.println("Please choose a valid menu option");
 			}
 		}
-		
+
 	}
-	
+
 	public void filmById(Scanner input) {
 		System.out.println("Please provide a film ID for lookup: ");
 		int filmId = input.nextInt();
 		Film film = db.findFilmById(filmId);
-		System.out.println("Title: " + film.getTitle()); 
-		System.out.println("Year Released: " + film.getReleaseYear()); 
-		System.out.println("Film Rating" + film.getRating()); 
-		System.out.println("Synopsis: " + film.getDescription());
-		for (Actor member : film.getCast()) {
-			System.out.println(member);
+		if (film == null) {
+			System.out.println("No film found with that ID");
 		}
-		System.out.println();
+		else {
+			System.out.println("Title: " + film.getTitle());
+			System.out.println("Year Released: " + film.getReleaseYear());
+			System.out.println("Film Rating: " + film.getRating());
+			System.out.println("Synopsis: " + film.getDescription());
+			for (Actor member : film.getCast()) {
+				System.out.println(member);
+			}
+			System.out.println();
+		}
 	}
-	
+
 	public void printMainMenu() {
 		System.out.println("------------------------------------");
 		System.out.println("----- 1: Look up a film by ID ------");
