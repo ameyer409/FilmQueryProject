@@ -62,6 +62,54 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		
 		return film;
 	}
+	
+	@Override
+	public List<Film> findFilmsByKeyword(String keyword) {
+		
+		List<Film> setOfFilms = new ArrayList<>();
+		
+		try {
+			Connection conn = DriverManager.getConnection(URL, USER, PWD);
+
+			String sql = "SELECT * FROM film WHERE film.title LIKE ? OR film.description LIKE ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, "%" + keyword + "%");
+			stmt.setString(2, "%" + keyword + "%");
+			ResultSet filmResult = stmt.executeQuery();
+			while (filmResult.next()) {
+				Film film = new Film(); // Create the object
+				// Here is our mapping of query columns to our object fields:
+				film.setId(filmResult.getInt("id"));
+				film.setTitle(filmResult.getString("title"));
+				film.setDescription(filmResult.getString("description"));
+				film.setReleaseYear(filmResult.getInt("release_year"));
+				film.setLanguageId(filmResult.getInt("language_id"));
+				film.setRentalDuration(filmResult.getInt("rental_duration"));
+				film.setRentalRate(filmResult.getDouble("rental_rate"));
+				film.setLength(filmResult.getInt("length"));
+				film.setReplacementCost(filmResult.getDouble("replacement_cost"));
+				film.setRating(filmResult.getString("rating"));
+				film.setSpecialFeatures(filmResult.getString("special_features"));
+//				Not sure if there is a null risk here?
+				List<Actor> cast = findActorsByFilmId(film.getId());
+				film.setCast(cast);
+				setOfFilms.add(film);
+			}
+			
+			
+			filmResult.close();
+			stmt.close();
+			conn.close();
+		}
+		catch (SQLException e) {
+			System.out.println("In findFilmByKeyword");
+			e.printStackTrace();
+		}
+		
+		
+		
+		return setOfFilms;
+	}
 
 	@Override
 	public Film findFilmById(int filmId) {
