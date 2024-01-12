@@ -14,7 +14,7 @@ public class FilmQueryApp {
 
 	DatabaseAccessor db = new DatabaseAccessorObject();
 
-	public static void main(String[] args) throws SQLException {
+	public static void main(String[] args) {
 		FilmQueryApp app = new FilmQueryApp();
 //		app.test();
     app.launch();
@@ -53,8 +53,7 @@ public class FilmQueryApp {
 			switch (option) {
 //			case 1 is for looking up a film by it's ID
 			case 1:
-				System.out.println("Film by ID!");
-//				filmById();
+				filmById(input);
 				break;
 //			case 2 is for looking up a film by a keyword
 			case 2:
@@ -70,6 +69,20 @@ public class FilmQueryApp {
 			}
 		}
 		
+	}
+	
+	public void filmById(Scanner input) {
+		System.out.println("Please provide a film ID for lookup: ");
+		int filmId = input.nextInt();
+		Film film = db.findFilmById(filmId);
+		System.out.println("Title: " + film.getTitle()); 
+		System.out.println("Year Released: " + film.getReleaseYear()); 
+		System.out.println("Film Rating" + film.getRating()); 
+		System.out.println("Synopsis: " + film.getDescription());
+		for (Actor member : film.getCast()) {
+			System.out.println(member);
+		}
+		System.out.println();
 	}
 	
 	public void printMainMenu() {
