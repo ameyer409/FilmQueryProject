@@ -97,6 +97,7 @@ public class FilmQueryApp {
 				}
 				System.out.println();
 			}
+			System.out.println("query returnted: " + films.size() + " films");
 		}
 	}
 

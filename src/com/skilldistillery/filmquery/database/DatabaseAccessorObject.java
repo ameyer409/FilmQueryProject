@@ -200,6 +200,9 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				actor.setFirstName(actorResult.getString("first_name"));
 				actor.setLastName(actorResult.getString("last_name"));
 			}
+			actorResult.close();
+			stmt.close();
+			conn.close();
 		}
 		catch (SQLException e) {
 			System.out.println("In findActorById");
@@ -227,6 +230,9 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				actor.setLastName(actorResult.getString("last_name"));
 				actorList.add(actor);
 			}
+			actorResult.close();
+			stmt.close();
+			conn.close();
 		}
 		catch (SQLException e) {
 			System.out.println("In findActorsByFilmID");
