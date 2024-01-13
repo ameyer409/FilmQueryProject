@@ -17,6 +17,31 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 	private static final String USER = "student";
 	private static final String PWD = "student";
 	
+	public String convertLanguage(int languageId) {
+		String lang = null;
+		try {
+			Connection conn = DriverManager.getConnection(URL, USER, PWD);
+
+			String sql = "SELECT name FROM language WHERE id = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, languageId);
+			ResultSet filmResult = stmt.executeQuery();
+			if (filmResult.next()) {
+				lang = filmResult.getString("name");
+			}
+			
+			
+			filmResult.close();
+			stmt.close();
+			conn.close();
+		}
+		catch (SQLException e) {
+			System.out.println("In convertLanguage");
+			e.printStackTrace();
+		}
+		return lang;
+	}
+	
 	@Override
 	public Film findFilmByKeyword(String keyword) {
 		Film film = null;
@@ -71,7 +96,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		try {
 			Connection conn = DriverManager.getConnection(URL, USER, PWD);
 
-			String sql = "SELECT * FROM film WHERE film.title LIKE ? OR film.description LIKE ?";
+			String sql = "SELECT * FROM film JOIN language lang ON film.language_id = lang.id WHERE film.title LIKE ? OR film.description LIKE ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setString(1, "%" + keyword + "%");
 			stmt.setString(2, "%" + keyword + "%");
@@ -93,6 +118,8 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 //				Not sure if there is a null risk here?
 				List<Actor> cast = findActorsByFilmId(film.getId());
 				film.setCast(cast);
+//				String language = convertLanguage(film.getLanguageId());
+				film.setLanguage(filmResult.getString("lang.name"));
 				setOfFilms.add(film);
 			}
 			
@@ -118,14 +145,15 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		try {
 			Connection conn = DriverManager.getConnection(URL, USER, PWD);
 
-			String sql = "SELECT * FROM film WHERE id = ?";
+//			String sql = "SELECT * FROM film WHERE id = ?";
+			String sql = "SELECT * FROM film JOIN language lang ON film.language_id = lang.id WHERE film.id = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, filmId);
 			ResultSet filmResult = stmt.executeQuery();
 			if (filmResult.next()) {
 				film = new Film(); // Create the object
 				// Here is our mapping of query columns to our object fields:
-				film.setId(filmResult.getInt("id"));
+				film.setId(filmResult.getInt("film.id"));
 				film.setTitle(filmResult.getString("title"));
 				film.setDescription(filmResult.getString("description"));
 				film.setReleaseYear(filmResult.getInt("release_year"));
@@ -138,6 +166,8 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				film.setSpecialFeatures(filmResult.getString("special_features"));
 				List<Actor> cast = findActorsByFilmId(filmId);
 				film.setCast(cast);
+//				String language = convertLanguage(film.getLanguageId());
+				film.setLanguage(filmResult.getString("lang.name"));
 			}
 			
 			

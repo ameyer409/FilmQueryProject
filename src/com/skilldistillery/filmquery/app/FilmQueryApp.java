@@ -1,7 +1,7 @@
 package com.skilldistillery.filmquery.app;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -45,31 +45,37 @@ public class FilmQueryApp {
 	}
 
 	private void startUserInterface(Scanner input) {
-
+		int option = 0;
 		while (true) {
-			printMainMenu();
-			System.out.println("How would you like to search?: ");
-			int option = input.nextInt();
-			switch (option) {
+			try {
+				printMainMenu();
+				System.out.println("How would you like to search?: ");
+				option = input.nextInt();
+				switch (option) {
 //			case 1 is for looking up a film by it's ID
-			case 1:
-				filmById(input);
-				break;
+				case 1:
+					filmById(input);
+					break;
 //			case 2 is for looking up a film by a keyword
-			case 2:
-				filmByKeyword(input);
-				break;
-			case 3:
-				System.out.println("Thank you for using the film lookup menu");
-				System.out.println("Goodbye!");
-				return;
-			default:
-				System.out.println("Please choose a valid menu option");
+				case 2:
+					filmByKeyword(input);
+					break;
+				case 3:
+					System.out.println("Thank you for using the film lookup menu");
+					System.out.println("Goodbye!");
+					return;
+				default:
+					System.out.println("Please choose a valid menu option");
+				}
+			}
+			catch (InputMismatchException e) {
+				System.out.println("Not a valid input");
+				clearBuffer(input);
 			}
 		}
 
 	}
-	
+
 	public void filmByKeyword(Scanner input) {
 		System.out.println("Please provide a keyword for lookup: ");
 		clearBuffer(input);
@@ -80,11 +86,12 @@ public class FilmQueryApp {
 		}
 		else {
 			for (Film film : films) {
-			System.out.println("Title: " + film.getTitle());
-			System.out.println("Year Released: " + film.getReleaseYear());
-			System.out.println("Film Rating: " + film.getRating());
-			System.out.println("Synopsis: " + film.getDescription());
-			System.out.println();
+				System.out.println("Title: " + film.getTitle());
+				System.out.println("Year Released: " + film.getReleaseYear());
+				System.out.println("Film Rating: " + film.getRating());
+				System.out.println("Synopsis: " + film.getDescription());
+				System.out.println("Language: " + film.getLanguage());
+				System.out.println();
 			}
 //			for (Actor member : film.getCast()) {
 //				System.out.println(member);
@@ -105,6 +112,7 @@ public class FilmQueryApp {
 			System.out.println("Year Released: " + film.getReleaseYear());
 			System.out.println("Film Rating: " + film.getRating());
 			System.out.println("Synopsis: " + film.getDescription());
+			System.out.println("Language: " + film.getLanguage());
 //			for (Actor member : film.getCast()) {
 //				System.out.println(member);
 //			}
@@ -118,7 +126,7 @@ public class FilmQueryApp {
 		System.out.println("--- 2: Look up a film by keyword ---");
 		System.out.println("------------- 3: Exit --------------");
 	}
-	
+
 	public void clearBuffer(Scanner input) {
 		input.nextLine();
 	}

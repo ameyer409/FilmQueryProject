@@ -17,7 +17,16 @@ public class Film {
 	private String rating;
 	private String specialFeatures;
 	private List<Actor> cast;
+	private String language;
 	
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
 	public List<Actor> getCast() {
 		return cast;
 	}
