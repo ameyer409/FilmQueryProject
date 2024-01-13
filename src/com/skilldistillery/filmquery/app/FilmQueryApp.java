@@ -91,11 +91,12 @@ public class FilmQueryApp {
 				System.out.println("Film Rating: " + film.getRating());
 				System.out.println("Synopsis: " + film.getDescription());
 				System.out.println("Language: " + film.getLanguage());
+				System.out.println("--- Cast Members --- ");
+				for (Actor member : film.getCast()) {
+					System.out.println(member.getFirstName() + " " + member.getLastName());
+				}
 				System.out.println();
 			}
-//			for (Actor member : film.getCast()) {
-//				System.out.println(member);
-//			}
 		}
 	}
 
@@ -113,9 +114,10 @@ public class FilmQueryApp {
 			System.out.println("Film Rating: " + film.getRating());
 			System.out.println("Synopsis: " + film.getDescription());
 			System.out.println("Language: " + film.getLanguage());
-//			for (Actor member : film.getCast()) {
-//				System.out.println(member);
-//			}
+			System.out.println("--- Cast Members ---");
+			for (Actor member : film.getCast()) {
+				System.out.println(member.getFirstName() + " " + member.getLastName());
+			}
 			System.out.println();
 		}
 	}
