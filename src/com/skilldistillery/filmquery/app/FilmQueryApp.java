@@ -78,56 +78,70 @@ public class FilmQueryApp {
 
 	public void filmByKeyword(Scanner input) {
 		System.out.println("Please provide a keyword for lookup: ");
-		clearBuffer(input);
-		String keyword = input.nextLine();
-		List<Film> films = db.findFilmsByKeyword(keyword);
-		if (films.isEmpty() == true) {
-			System.out.println("No films found that match your keyword");
+		try {
+			clearBuffer(input);
+			String keyword = input.nextLine();
+			List<Film> films = db.findFilmsByKeyword(keyword);
+			if (films.isEmpty() == true) {
+				System.out.println("No films found that match your keyword");
+			}
+			else {
+				for (Film film : films) {
+					System.out.println("Title: " + film.getTitle());
+					System.out.println("Year Released: " + film.getReleaseYear());
+					System.out.println("Film Rating: " + film.getRating());
+					System.out.println("Synopsis: " + film.getDescription());
+					System.out.println("Language: " + film.getLanguage());
+					System.out.println("--- Cast Members --- ");
+					for (Actor member : film.getCast()) {
+						System.out.println(member.getFirstName() + " " + member.getLastName());
+					}
+					System.out.println();
+				}
+				System.out.println("query returnted: " + films.size() + " films");
+			}
 		}
-		else {
-			for (Film film : films) {
+		catch (InputMismatchException e) {
+			System.out.println("Not a valid input");
+			clearBuffer(input);
+		}
+
+	}
+
+	public void filmById(Scanner input) {
+		System.out.println("Please provide a film ID for lookup: ");
+		try {
+			clearBuffer(input);
+			int filmId = input.nextInt();
+			Film film = db.findFilmById(filmId);
+			if (film == null) {
+				System.out.println("No film found with that ID");
+			}
+			else {
 				System.out.println("Title: " + film.getTitle());
 				System.out.println("Year Released: " + film.getReleaseYear());
 				System.out.println("Film Rating: " + film.getRating());
 				System.out.println("Synopsis: " + film.getDescription());
 				System.out.println("Language: " + film.getLanguage());
-				System.out.println("--- Cast Members --- ");
+				System.out.println("--- Cast Members ---");
 				for (Actor member : film.getCast()) {
 					System.out.println(member.getFirstName() + " " + member.getLastName());
 				}
 				System.out.println();
 			}
-			System.out.println("query returnted: " + films.size() + " films");
 		}
-	}
-
-	public void filmById(Scanner input) {
-		System.out.println("Please provide a film ID for lookup: ");
-		clearBuffer(input);
-		int filmId = input.nextInt();
-		Film film = db.findFilmById(filmId);
-		if (film == null) {
-			System.out.println("No film found with that ID");
-		}
-		else {
-			System.out.println("Title: " + film.getTitle());
-			System.out.println("Year Released: " + film.getReleaseYear());
-			System.out.println("Film Rating: " + film.getRating());
-			System.out.println("Synopsis: " + film.getDescription());
-			System.out.println("Language: " + film.getLanguage());
-			System.out.println("--- Cast Members ---");
-			for (Actor member : film.getCast()) {
-				System.out.println(member.getFirstName() + " " + member.getLastName());
-			}
-			System.out.println();
+		catch (InputMismatchException e) {
+			System.out.println("Not a valid input");
+			clearBuffer(input);
 		}
 	}
 
 	public void printMainMenu() {
-		System.out.println("------------------------------------");
-		System.out.println("----- 1: Look up a film by ID ------");
-		System.out.println("--- 2: Look up a film by keyword ---");
-		System.out.println("------------- 3: Exit --------------");
+		System.out.println("|------------------------------------|");
+		System.out.println("|----- 1: Look up a film by ID ------|");
+		System.out.println("|--- 2: Look up a film by keyword ---|");
+		System.out.println("|------------- 3: Exit --------------|");
+		System.out.println("|------------------------------------|");
 	}
 
 	public void clearBuffer(Scanner input) {
